@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+<!-- define the block content to be injected -->
+
+{% block content %}
+
+
+<div class="card my-4">
+    <div class="h6 card-header py-4 d-flex justify-content-between align-items-center">
+        <a>Customers who has bought <strong>{{ product.product_name }}</strong> product.</a>
+        <a href = {% url 'DjTraders.ProductAnalysisPage' pk=product.product_id %}
+            class="text-dark text-decoration-none pe-4" 
+            title= "Customers"
+            style="cursor:pointer;">
+            <i class="fa-solid fa-chart-column"></i>
+            Further Product analysis
+        </a>
+    </div>
+
+    <div class="card-body border-0 my-4 mx-4">
+        <div>
+            <table class="table table-hover order-column "
+           id="ProductDetailTable" width="100%">
+                <thead>
+                    <tr class="fs-6">
+                        <th class="text-center" style="width:20%"> Customer </th>
+                        <th class="ps-1" style="width:15%"> Contact</th>
+                        <th class="text-center" style="width:30%">Address</th>
+                        <th class="" style="width:10%">City</th>
+                        <th class="px-2" style="width:15%">Postal Code</th>
+                        <th class="px-2" style="">Country</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer in product.PurchasedBy %}
+                    <tr>
+                        <td>{{customer.customer_name}}</td>
+                        <td>{{customer.contact_name}}</td>
+                        <td>{{customer.address}}</td>
+                        <td>{{customer.city}}</td>
+                        <td>{{customer.postal_code}}</td>
+                        <td>{{customer.country}}</td>
+                    </tr>
+                    {% empty %}
+                        <div> No customers have bought this product yet. </div>
+                    {% endfor %}
+                </tbody>
+            <table>               
+        </div> 
+    </div>
+
+    <div style="padding-left:90%;padding-bottom:5px;">
+        <a class="btn btn-outline-info mt-3" href = "{% url 'DjTraders.Products' %}" style="right: 0; bottom: 20px; margin-right: 20px; border-radius: 5px; border-color: black; text-decoration: black; color: black;">
+            <i class="fa-solid fa-rotate-left" style="color:black;"></i>
+            Back
+        </a>
+    </div>
+</div>
+
+{% endblock %}

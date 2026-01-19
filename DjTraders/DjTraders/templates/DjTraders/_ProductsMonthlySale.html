@@ -1,0 +1,61 @@
+{% block content %}
+ 
+<div class="container my-4 p-3 bg-light rounded shadow" id="AllProducts">
+    <div id="SearchBar" class="navbar small px-3 py-2 mb-4 rounded-2 shadow-sm bg-white d-flex justify-content-between align-items-center">
+        <h5 class="fw-bold text-primary mb-0">Products {% if selOrderYear %} in {{ selOrderYear }} {% endif %}</h5>
+        <div class="d-flex align-items-center">
+            <label for="selOrderYear" class="me-2 mb-0">Year</label>
+            <select name="selOrderYear" id="selOrderYear" class="form-select form-select-sm" onchange="RefreshOrdersInYearPlot()">
+                <option value="" {% if not selOrderYear %} selected="selected" {% endif %}>All</option>
+                {% for year in OrderYears %}
+                    <option value="{{ year.Year }}" {% if year.Year == selOrderYear|add:"0" %} selected="selected" {% endif %}>
+                        {{ year.Year }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="border rounded shadow p-3 bg-white">
+                <h6 class="text-center text-secondary mb-3">Monthly Sales Overview</h6>
+                <div id="ProductsMonthlySalePlot" style="height:600px;">
+                    {{ ProductsMonthlySalePlot|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function ()
+    {
+    });
+
+    function RefreshOrdersInYearPlot() {
+        var selOrderYear = $('#selOrderYear').val();
+
+        $.ajax({
+            url: "{% url 'DjTraders.ProductsMonthlySale' %}",
+            data: { 
+                product_id: {{ product.product_id }},
+                selOrderYear: selOrderYear 
+            },
+            beforeSend: function () {
+                $('#AllProducts').html("Retrieving results...");
+            },
+            success: function (result) {
+                $('#AllProducts').html(result);
+            },
+            error: function () {
+                $('#AllProducts').html('An error occurred while fetching data.');
+            }
+        });
+    }
+    // });
+</script>
+
+
+{% endblock %}

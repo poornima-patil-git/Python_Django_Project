@@ -1,0 +1,67 @@
+{% block content %}
+
+<div class="my-2 mx-4" id="ProductSalesAnalysis">
+    <div>
+        <div class="navbar my-2 px-3 rounded shadow bg-light">
+            <h5 class="mb-0">Product Sales Analysis</h5>
+            <div class="d-flex align-items-center mx-2">
+                <label for="selOrderYear" class="mx-2 mb-0">Year</label>
+                <select name="selOrderYear" id="selOrderYear" class="form-select form-select-sm" onchange="ProductSalesAnalysis()">
+                    <option value="" {% if not selOrderYear %} selected="selected" {% endif %}>All</option>
+                    {% for year in OrderYears %}
+                        <option value="{{ year.Year }}" {% if year.Year == selOrderYear|add:"0" %} selected="selected" {% endif %}>
+                            {{ year.Year }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row gx-4 mt-3">
+        <div class="col-md-6">
+            <div class="border rounded shadow p-3 bg-white w-100" style="min-height: 600px;">
+                <h6 class="text-center mb-3">Annual Sales</h6>
+                <div id="CategoryPlot">
+                    {{ ProductAnnualySalesPlot|safe }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="border rounded shadow p-3 bg-white w-100" style="min-height: 600px;">
+                <h6 class="text-center mb-3">Monthly Sales</h6>
+                <div id="CategoryPlot">
+                    {{ ProductMonthlySalesPlot|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+	$(document).ready(function ()
+    {
+    });
+
+	function ProductSalesAnalysis() {
+        var selOrderYear = $('#selOrderYear').val();
+        $.ajax({
+            url: "{% url 'DjTraders.ProductSalesAnalysis' pk=product.product_id %}",
+            data: { selOrderYear: selOrderYear },
+            beforeSend: function () {
+                $('#ProductSalesAnalysis').html("Loading updated plots...");
+            },
+            success: function (result) {
+                $('#ProductSalesAnalysis').html(result);
+            },
+            error: function () {
+                alert('Error updating sales plots.');
+            }
+        });
+    }
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{% block content %}
+
+<div class="mx-4 mb-4 p-3 bg-light rounded shadow" id="AllOrdersByCategory">
+	<div class="mb-4 text-center">
+		<h4 class="fw-bold text-primary">
+			{{customer}} Categories of Product Sales 
+		</h4>
+	</div>
+	<div class="row gx-4">
+        <div class="col-md-6">
+            <div class="border rounded shadow p-3 bg-white">
+                <h6 class="text-center text-secondary mb-3">Category Revenue</h6>
+                <div id="CategoryPlot" style="height:600px;">
+                    {{ CategoryRevenuesPlot|safe }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="border rounded shadow p-3 bg-white">
+                <h6 class="text-center text-secondary mb-3">Category Sales</h6>
+                <div id="CategoryPlot" style="height:600px;">
+                    {{ CategoryPlot|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+	$(document).ready(function ()
+    {
+    });
+
+</script>
+
+{% endblock %}

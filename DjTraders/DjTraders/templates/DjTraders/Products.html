@@ -1,0 +1,146 @@
+<!-- tell the page to "use" the base template -->
+{% extends "base.html" %}
+
+<!-- define the block content to be injected -->
+
+{% block content %}
+<section id="SearchBar" class="small px-3 py-3 rounded-3 shadow-sm bg-light mb-4">
+    <form action="{% url 'DjTraders.Products' %}">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold text-primary">Search Products</h5>
+            <button class="btn btn-primary btn-sm" type="submit">
+                <i class="fa-solid fa-magnifying-glass me-2"></i>Search
+            </button>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label for="srchProductName" class="form-label">Product Name</label>
+                <input type="text" 
+                       name="srchProductName" 
+                       id="srchProductName" 
+                       class="form-control form-control-sm" 
+                       placeholder="Enter product name" 
+                       value="{{ srchProductName }}">
+            </div>
+
+            <div class="col-md-3">
+                <label for="srchProductCategory" class="form-label">Category</label>
+                <select name="srchProductCategory" 
+                        id="srchProductCategory" 
+                        class="form-select form-select-sm" 
+                        onchange="this.form.submit()">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category.category__category_name }}" 
+                                {% if category.category__category_name == srchProductCategory %}selected{% endif %}>
+                            {{ category.category__category_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label for="price_filter" class="form-label">Filter by Price</label>
+                <select name="price_filter" id="price_filter" class="form-select form-select-sm">
+                    <option value="">Select Filter</option>
+                    <option value="greater" {% if price_filter == 'greater' %}selected{% endif %}>Greater than</option>
+                    <option value="less" {% if price_filter == 'less' %}selected{% endif %}>Less than</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label for="price_value" class="form-label">Price Value</label>
+                <input type="number" 
+                       name="price_value" 
+                       id="price_value" 
+                       value="{{ price_value }}" 
+                       step="0.01" 
+                       class="form-control form-control-sm">
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex justify-content-between">
+            <div></div>
+            <div>
+                <a href="{% url 'DjTraders.ProductAdd' %}" 
+                   class="btn btn-outline-primary btn-sm me-3" 
+                   title="Add a new Product">
+                    <i class="fa-solid fa-square-plus me-2"></i>Add a Product
+                </a>
+                <a href="{% url 'DjTraders.TopBottomProductOrders' %}" 
+                   class="btn btn-outline-secondary btn-sm" 
+                   title="View Product Revenues">
+                    <i class="fa-solid fa-dollar-sign me-2"></i>Product Revenues
+                </a>
+            </div>
+        </div>
+    </form>
+</section>
+
+
+
+<div class="container shadow-sm small">
+	{% if products %}
+	<table class="table table-hover order-column "
+		   id="ProductsTable" width="100%">
+		<thead>
+			<tr class="fs-6">
+				<th class="" style=""> Product </th>
+				<th class="ps-1" style=""> Category </th>
+				<th class="" style="width: 15%; text-align:start;"> Price </th>
+				<th class="" style=""> Unit </th>
+				<th> &nbsp;</th>
+				<th> &nbsp;</th>
+				<th> Summary </th>
+				<th> Active Product </th>
+			</tr>
+		</thead>
+
+		<tbody>
+	
+			{% for product in products %}
+			<tr>
+				<td>{{product.product_name}}</td>
+				<td>{{product.category.category_name}}</td>
+				<td style="text-align: start;">{{product.price}}</td>
+				<td>{{product.unit}}</td>
+				<td title="View Product" class="mt-1">
+					<a href = {% url 'DjTraders.ProductDetail' pk=product.product_id %}
+						class="">
+						<i class="fa-solid fa-forward" style="color: rgb(9, 33, 52);"></i>
+					</a>
+				</td>
+				<td title="Edit Product" class="mt-1">
+					<a 	href = {% url 'DjTraders.ProductEdit' pk=product.product_id %}
+						class="">
+						<i class="fa-sharp fa-solid fa-pen-to-square" style="color: rgb(9, 33, 52);"></i>
+					</a>
+				</td>
+				<td title="Order Summary" class="mt-1">
+                    <a  href = {% url 'DjTraders.ProductPurchaseSummary' pk=product.product_id %}
+                        class="">
+                        <i class="fa-solid fa-list-ul" style="color: rgb(9, 33, 52);"></i>
+                    </a>
+                </td>
+				<td>{{product.get_availabilityStatus}}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	<table>	
+	{% else %}
+		No Products Found
+	{% endif %}
+</div>
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+		//debugger;
+		MakeDataTable('ProductsTable');
+	});
+
+</script>
+
+
+{% endblock %}

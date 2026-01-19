@@ -1,0 +1,41 @@
+<!-- v2.1 Added form for Add/Edit Products. -->
+{% extends "base.html" %}
+{%load crispy_forms_tags %} 
+
+{% block content %}
+
+<div class="my-2">
+    {% if 'new' in request.path  %}
+	    <h5> Add new Product </h5>
+    {% endif %}   
+    {% if 'Edit' in request.path  %} 
+        <h5> Edit Product </h5>
+    {% endif %}    
+</div>
+<div class="my-4 container shadow ">
+		{% crispy form %}
+</div> 
+
+<form method="POST">
+	{% csrf_token %}
+	<table>
+		{% comment %} {{form}} {% endcomment %}
+		{% comment %} {{form.as_p}} {% endcomment %}
+		{% comment %} {{form.as_table}} {% endcomment %}
+		{% comment %} {{form|crispy}} {% endcomment %}
+	</table>	
+
+	<div class="navbar">
+		<div></div>
+		<div>
+			<a class="btn btn-light mt-3" href = "{% url 'DjTraders.Products' %}">
+				<i class="fa-solid fa-xmark" style="color: darkred;"></i>
+				Cancel 
+			</a>
+		</div>
+	</div>
+
+</form>
+
+
+{% endblock %}

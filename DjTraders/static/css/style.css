@@ -1,0 +1,120 @@
+body {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+ul.errorlist{
+	display: none;
+}
+
+.selectedTab {
+    background-color: lightsteelblue;
+    border: 1px solid lightgray;
+    box-shadow:black;
+}
+
+.bgImage1 {
+  margin: -10px;
+  padding: 0;
+  height: 90vh;
+  background-image: url('/static/images/bg5.png') no-repeat 400px; 
+  background-size: cover; 
+  background-repeat: no-repeat; 
+  background-position: center; 
+}
+
+.background h1 {
+  color: white;
+  text-align: center;
+  padding-top: 20%;
+  font-size: 2.5rem;
+}
+
+.offer-box {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  padding: 10px;
+  text-align: left;
+}
+
+.offer-box h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.offer-box p {
+  margin: 8px 0;
+  font-size: 16px;
+  color: #555;
+}
+
+.offer-box strong {
+  color: #000;
+}
+
+.highlight {
+  color: #d9534f; 
+  font-weight: bold;
+}
+
+.suggested-action {
+  margin-top: 15px;
+  padding: 10px 15px;
+  background-color: #5cb85c; 
+  color: #fff;
+  border-radius: 4px;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.suggested-action:hover {
+  background-color: #4cae4c;
+}
+
+
+.offer-box1 {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  max-width: 100%;
+  width: 100%;
+  text-align: left;
+}
+
+.offer-box1 strong {
+  color: #333;
+}
+
+#carousel {
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 10px 0;
+  position: relative;
+}
+
+#carousel span {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #E5ECF6; 
+  color: #333;
+  margin: 5px;
+  border-radius: 20px; 
+  font-size: 14px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#carousel span:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+#carousel span:nth-child(even) {
+  background-color: #ffe4e1; 
+}

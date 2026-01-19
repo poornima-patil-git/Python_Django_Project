@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<body>
+    <div class="background">
+        <a 	class="mx-2 nav-item shadow-sm btn" 
+			href="{% url 'DjTraders.Customers' %}"> 
+			Customers
+		</a>
+
+		<a 	class="mx-2 nav-item shadow-sm btn" 
+				href="{% url 'DjTraders.Products' %}"> 
+			Products
+		</a>
+    </div>
+</body>
+
+{% endblock %}

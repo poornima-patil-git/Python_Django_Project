@@ -1,0 +1,221 @@
+<!-- tell the page to "use" the base template -->
+{% extends "base.html" %}
+
+<!-- define the block content to be injected -->
+
+{% block content %}
+
+
+<div class="card mb-4 border-0 bg-light">
+	<div class="card-header py-2 mb-2">
+		<h4>
+			{{product.product_name}}
+		</h4>
+	</div>
+
+	<!-- 
+		v3.1 Added navbar Navigation for individual partials.
+	-->
+	<div>
+		<ul class="nav nav-tabs justify-content-center">
+			<li class="nav-item" style="cursor:pointer" onclick="ShowHomeTab();">
+				<a class="nav-link" id="ProductHomeTab"> Annual Sales Analysis </a>
+			</li>
+
+            <li class="nav-item" style="cursor:pointer" onclick="ShowProductsMonthlyTab();">
+				<a class="nav-link" id="ProductsMonthlyTab"> Monthly Sales Analysis </a>
+			</li>
+
+			<li class="nav-item" style="cursor:pointer" onclick="ShowTopBottomAnalysis();">
+				<a class="nav-link" id="ProductsTopBottomAnalysisTab"> Top Bottom Products Analysis </a>
+			</li>
+
+			<li class="nav-item" style="cursor:pointer" onclick="ShowProductSalesAnalysis();">
+				<a class="nav-link" id="ProductsTab"> Product Sales Analysis </a>
+			</li>
+
+			<li class="nav-item" style="cursor:pointer" onclick="ShowProductSalesByCategory();">
+				<a class="nav-link" id="CategoriesTab"> Category Sales Analysis </a>
+			</li>
+	  	</ul>
+	</div>
+
+	<div class="container card-body border-0" id="ProductHome">
+        <div>
+            {{ProductsSalePlot|safe}}
+        </div>
+	</div>
+
+	<div class=" card-body tab-content" >
+		<div id="ProductInformation">
+			Product Information is Showing
+		</div>
+	</div>
+
+</div>
+
+<script type="text/javascript">
+ 
+    $(document).ready(function ()
+    {
+        ShowHomeTab();
+    });
+ 
+ 
+    function ShowHomeTab(){
+ 
+        ClearActive();
+        $('#ProductHomeTab').addClass('selectedTab');
+        $('#ProductHome').show();
+        $('#ProductInformation').hide();
+    }
+
+    function ShowProductsMonthlyTab(){
+        
+        ClearActive();
+        $('#ProductHome').hide()
+        $('#ProductsMonthlyTab').addClass('selectedTab');
+
+        $.ajax({
+			
+			url: "{% url 'DjTraders.ProductsMonthlySale' %}",
+			data: {
+				product_id: {{product.product_id}},
+			},
+
+			beforeSend: function () {
+			
+				$('#ProductInformation').empty();
+				$('#ProductInformation').html("Retrieving results.");
+			},
+
+			success: function(result) {
+				$('#ProductHome').hide();
+				$('#ProductInformation').empty();
+				$('#ProductInformation').html(result);
+			},
+
+			error: function(){
+				$('#ProductInformation').empty();
+				$('#ProductInformation').html('An Error occurred in Request: {{request}}');
+			},
+
+			complete: function(){
+				$('#ProductInformation').show();
+			},
+
+		});
+    }
+
+    function ShowProductSalesByCategory(){
+        
+        ClearActive();
+        $('#ProductHome').hide()
+        $('#CategoriesTab').addClass('selectedTab');
+
+        $.ajax({
+			
+			url: "{% url 'DjTraders.ProductsSaleAnalysisByCategory' %}",
+			data: {
+				product_id: {{product.product_id}},
+			},
+
+			beforeSend: function () {
+			
+				$('#ProductInformation').empty();
+				$('#ProductInformation').html("Retrieving results.");
+			},
+
+			success: function(result) {
+				$('#ProductHome').hide();
+				$('#ProductInformation').empty();
+				$('#ProductInformation').html(result);
+			},
+
+			error: function(){
+				$('#ProductInformation').empty();
+				$('#ProductInformation').html('An Error occurred in Request: {{request}}');
+			},
+
+			complete: function(){
+				$('#ProductInformation').show();
+			},
+
+		});
+    }
+
+    function ShowProductSalesAnalysis(){
+        
+        ClearActive();
+        $('#ProductHome').hide()
+        $('#ProductsTab').addClass('selectedTab');
+
+        $.ajax({
+			
+			url: "{% url 'DjTraders.ProductSalesAnalysis' pk=product.product_id %}",
+			data: {
+				product_id: {{product.product_id}},
+			},
+
+			beforeSend: function () {
+			
+				$('#ProductInformation').empty();
+				$('#ProductInformation').html("Retrieving results.");
+			},
+
+			success: function(result) {
+				$('#ProductHome').hide();
+				$('#ProductInformation').empty();
+				$('#ProductInformation').html(result);
+			},
+
+			error: function(){
+				$('#ProductInformation').empty();
+				$('#ProductInformation').html('An Error occurred in Request: {{request}}');
+			},
+
+			complete: function(){
+				$('#ProductInformation').show();
+			},
+
+		});
+    }
+
+	function ShowTopBottomAnalysis(){
+		ClearActive();
+        $('#ProductHome').hide()
+        $('#ProductsTopBottomAnalysisTab').addClass('selectedTab');
+
+		$.ajax({
+			
+			url: "{% url 'DjTraders.TopBottomProductOrders' %}",
+
+			beforeSend: function () {
+			
+				$('#ProductInformation').empty();
+				$('#ProductInformation').html("Retrieving results.");
+			},
+
+			success: function(result) {
+				$('#ProductHome').hide();
+				$('#ProductInformation').empty();
+				$('#ProductInformation').html(result);
+			},
+
+			error: function(){
+				$('#ProductInformation').empty();
+				$('#ProductInformation').html('An Error occurred in Request: {{request}}');
+			},
+
+			complete: function(){
+				$('#ProductInformation').show();
+			},
+
+		});
+	}
+ 
+</script>
+ 
+
+{% endblock %}
+

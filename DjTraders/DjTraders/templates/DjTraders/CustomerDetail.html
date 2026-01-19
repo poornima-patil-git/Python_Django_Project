@@ -1,0 +1,287 @@
+<!-- tell the page to "use" the base template -->
+{% extends "base.html" %}
+
+<!-- define the block content to be injected -->
+
+{% block content %}
+
+<div class="card my-4 border-0 mx-4">
+	<div class="offer-box1">
+		Hey <strong>{{customer.customer_name}},</strong> Here are some of the products suggested for you based on your previous purchases:
+		<div id="carousel" style="overflow: hidden; white-space: nowrap;">
+			{% for product in SuggestedProducts %}
+				<span style="display: inline-block; padding: 10px; border: 1px solid #ccc; margin: 5px;">
+					{{ product.product_name }}
+				</span>
+			{% endfor %}
+			<!-- Duplicate the content for seamless scrolling -->
+			{% for product in SuggestedProducts %}
+				<span style="display: inline-block; padding: 10px; border: 1px solid #ccc; margin: 5px;">
+					{{ product.product_name }}
+				</span>
+			{% endfor %}
+		</div>
+	</div>
+	<div class="offer-box">
+        <p>
+            <i class="fa-solid fa-star" style="color: #FFD43B;"></i> 
+			Based on your spending of <strong>{{SuggestOffers.latest_spending}}</strong> in {{SuggestOffers.latest_year}}, you are at the <span class="highlight">{{SuggestOffers.current_level}}</span> level.
+		</p>
+        <p>{{ SuggestOffers.advice }}</p>
+    </div>
+	
+	<div class="card-header py-2 my-2">
+		<h4>
+			{{customer.customer_name}}
+		</h4>
+	</div>
+	<!-- 
+		v3.1 Added navbar Navigation for individual partials.
+	-->
+	<div>
+		<ul class="nav nav-tabs justify-content-center">
+			<li class="nav-item"style="cursor:pointer" onclick="ShowHomeTab();">
+				<a class="nav-link active" id="CustomerHomeTab"> Home </a>
+			</li>
+
+			<li class="nav-item" style="cursor:pointer" onclick="GetOrdersPlaced();">
+				<a class="nav-link" id="OrdersPlacedTab"> Orders Placed </a>
+			</li>
+
+			<li class="nav-item" style="cursor:pointer" onclick="GetOrdersByDate();">
+				<a class="nav-link" id="OrdersByDateTab"> Orders By Date </a>
+			</li>
+
+			<li class="nav-item" style="cursor:pointer" onclick="GetOrdersByProduct()">
+				<a class="nav-link" id="ProductsTab"> Orders By Product </a>
+			</li>
+
+			<li class="nav-item" style="cursor:pointer" onclick="GetOrdersByCategory()">
+				<a class="nav-link" id="CategoriesTab"> Orders By Categories </a>
+			</li>
+	  	</ul>
+	</div>
+
+	<div class=" card-body border-0 " id="CustomerHome">
+		<div class="row row-cols-2" id="">
+			<div class="col-7">
+				<h6 class="">
+				  Orders Placed by: {{customer.customer_name}} 
+				  {% comment %} <span class="text-bg-light fst-italic">[{{customer.Password}}]</span> {% endcomment %}
+				</h6>
+
+				{% comment %} 
+					# v3.0 Added 
+					Note the use of the safe filter used to tell django that 
+					the content in "plot" is safe to render on the page.
+					Try deleting the safe filter and compare the output.
+				{% endcomment %}
+				<div style="">
+					{{OrdersPlot|safe}}
+				</div>
+			</div>
+
+			<div class="col-5">
+				<div id="OrdersPlaced">
+					{% include 'DjTraders/_OrdersPlaced.html'%}
+			</div>
+		</div>
+
+		</div>
+	</div>
+	<div class="container card-body tab-content container" >
+		<div id="CustomerInformation">
+			Customer Information is Showing
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+	$(document).ready(function ()
+    {
+		ShowHomeTab();
+    });
+
+	const carousel = document.getElementById("carousel");
+    let speed = 1;
+
+    function scrollContinuously() {
+        carousel.scrollLeft += speed;
+
+        // Reset to the beginning when reaching the end of the content
+        if (carousel.scrollLeft >= carousel.scrollWidth / 2) {
+            carousel.scrollLeft = 0;
+        }
+        requestAnimationFrame(scrollContinuously); // Continue scrolling
+    }
+
+    scrollContinuously();
+
+	function ShowHomeTab(){
+
+		//debugger;
+		ClearActive();
+        $('#CustomerHomeTab').addClass('selectedTab');
+		
+        $('#CustomerHome').show();
+		$('#CustomerInformation').hide();
+	}
+
+	function GetOrdersPlaced(){
+		
+		debugger;
+		ClearActive();
+        $('#OrdersPlacedTab').addClass('selectedTab');
+
+				
+
+		$.ajax({
+			
+			url: "{% url 'DjTraders.OrdersPlaced' %}",
+			data: {
+				customer_id: {{customer.customer_id}},
+			},
+
+			beforeSend: function () {
+			
+				$('#CustomerInformation').empty();
+				$('#CustomerInformation').html("Retrieving results.");
+			},
+
+			success: function(result) {
+				$('#CustomerHome').hide();
+				$('#CustomerInformation').empty();
+				$('#CustomerInformation').html(result);
+			},
+
+			error: function(){
+				$('#CustomerInformation').empty();
+				$('#CustomerInformation').html('An Error occurred in Request: {{request}}');
+			},
+
+			complete: function(){
+				$('#CustomerInformation').show();
+			},
+
+		});
+	}
+
+
+	function GetOrdersByDate(){
+		
+		//debugger;
+		ClearActive();
+        $('#OrdersByDateTab').addClass('selectedTab');
+
+		$.ajax({
+			
+			url: "{% url 'DjTraders.OrdersByDate' %}",
+			data: {
+				customer_id: {{customer.customer_id}},
+			},
+
+			beforeSend: function () {
+			
+				$('#CustomerInformation').empty();
+				$('#CustomerInformation').html("Retrieving results.");
+			},
+
+			success: function(result) {
+				$('#CustomerHome').hide();
+				$('#CustomerInformation').empty();
+				$('#CustomerInformation').html(result);
+			},
+
+			error: function(){
+				$('#CustomerInformation').empty();
+				$('#CustomerInformation').html('An Error occurred in Request: {{request}}');
+			},
+
+			complete: function(){
+				$('#CustomerInformation').show();
+			},
+
+		});
+	}
+
+
+	function GetOrdersByProduct(){
+		
+		//debugger;
+		ClearActive();
+        $('#ProductsTab').addClass('selectedTab');
+
+		$.ajax({
+			
+			url: "{% url 'DjTraders.OrdersByProduct' %}",
+			data: {
+				customer_id: {{customer.customer_id}},
+			},
+
+			beforeSend: function () {
+			
+				$('#CustomerInformation').empty();
+				$('#CustomerInformation').html("Retrieving results.");
+			},
+
+			success: function(result) {
+				$('#CustomerHome').hide();
+				$('#CustomerInformation').empty();
+				$('#CustomerInformation').html(result);
+			},
+
+			error: function(){
+				$('#CustomerInformation').empty();
+				$('#CustomerInformation').html('An Error occurred in Request: {{request}}');
+			},
+
+			complete: function(){
+				$('#CustomerInformation').show();
+			},
+
+		});
+	}
+
+	function GetOrdersByCategory(){
+		
+		//debugger;
+		ClearActive();
+        $('#CategoriesTab').addClass('selectedTab');
+
+		$.ajax({
+			
+			url: "{% url 'DjTraders.OrdersByCategory' %}",
+			data: {
+				customer_id: {{customer.customer_id}},
+			},
+
+			beforeSend: function () {
+			
+				$('#CustomerInformation').empty();
+				$('#CustomerInformation').html("Retrieving results.");
+			},
+
+			success: function(result) {
+				$('#CustomerHome').hide();
+				$('#CustomerInformation').empty();
+				$('#CustomerInformation').html(result);
+			},
+
+			error: function(){
+				$('#CustomerInformation').empty();
+				$('#CustomerInformation').html('An Error occurred in Request: {{request}}');
+			},
+
+			complete: function(){
+				$('#CustomerInformation').show();
+			},
+
+		});
+	}
+
+
+</script>
+
+{% endblock %}
+
