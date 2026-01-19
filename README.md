@@ -22,20 +22,20 @@
 
   - **Create and Update:** Allow the user to perform Create and Update operations.
 
-# Technologies Used
+**Technologies Used**
 
   -  Python 3.x
   -  Django
   -  SQLite (or any other database
 
-# Installation in Visual Studio Code Prerequisites Before proceeding, make sure to installed the following :
+**Installation in Visual Studio Code Prerequisites Before proceeding, make sure to installed the following :**
 
   - Python (version 3.x): Download Python from https://www.python.org/downloads/
   - Django: This will be installed as part of the setup
   - Visual Studio Code: Download VS Code from https://code.visualstudio.com/
   - VS Code Extensions: Python extension for VS Code
 
-# Step-by-Step Guide
+**Step-by-Step Guide**
 
   1. Open the project folder 'DjangoTraders' in Visual Studio Code and Navigate into the project directory. (cd DjangoTraders)
   2. Set up a Python virtual environment. (python3 -m venv venv)
